@@ -3,6 +3,7 @@
 folder=$(echo $(cd -- $(dirname -- "${BASH_SOURCE[0]}") && pwd) | awk -F/ '{print $NF}')
 config=~/scripts/$folder/cfg
 
+#this is outdated
 if [ -f $config ]
  then
    echo "Config file found."  
