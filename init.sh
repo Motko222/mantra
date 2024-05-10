@@ -16,3 +16,11 @@ sed -i 's|seeds =.*|seeds = "'$(curl -s $seed/$CHAIN/seeds)'"|g' $DATA/config/co
 
 #min gas
 sed -i 's/minimum-gas-prices =.*/minimum-gas-prices = "$GAS_PRICE"/g' $DATA/config/app.toml
+
+#prunning
+sed -i \
+  -e 's|^pruning *=.*|pruning = "custom"|' \
+  -e 's|^pruning-keep-recent *=.*|pruning-keep-recent = "100"|' \
+  -e 's|^pruning-keep-every *=.*|pruning-keep-every = "0"|' \
+  -e 's|^pruning-interval *=.*|pruning-interval = "19"|' \
+  $DATA/config/app.toml
