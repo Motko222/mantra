@@ -32,11 +32,10 @@ threshold=$($BINARY query tendermint-validator-set -o json | jq -r .validators[]
 
 if $catchingUp
  then 
-  status="warning"
+  status="syncing"
   note="height=$latestBlock"
  else 
-  status="ok"
-  note="act $active | del $delegators | vp $tokens | thr $threshold | bal $balance"
+  if [ $active -eq 1 ]; then status=active; else status=inactive; fi
 fi
 
 if $jailed
