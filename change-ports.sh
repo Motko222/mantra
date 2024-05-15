@@ -3,9 +3,9 @@
 folder=$(echo $(cd -- $(dirname -- "${BASH_SOURCE[0]}") && pwd) | awk -F/ '{print $NF}')
 source ~/scripts/$folder/cfg
 
-if [ -z PORT_SET ]; then echo "Port set not configured.";exit 1; fi
+read -p "Set? " $set
 
-case $PORT_SET in
+case $set in
  1) sed -i.bak -e "s%:26658%:27658%; s%:26657%:27657%; s%:6060%:6160%; s%:26656%:27656%; s%:26660%:27660%" $DATA/config/config.toml 
     sed -i.bak -e "s%:9090%:9190%; s%:9091%:9191%; s%:1317%:1417%; s%:8545%:8645%; s%:8546%:8646%; s%:6065%:6165%" $DATA/config/app.toml 
     sed -i.bak -e "s%:26657%:27657%" $DATA/config/client.toml 
