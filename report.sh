@@ -46,7 +46,7 @@ fi
 
 if [ -z $pid ];
 then status="error";
- note="not running";
+ note="process not running";
 fi
 
 #json output
