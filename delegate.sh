@@ -17,7 +17,7 @@ echo "Balance: $balance $DENOM"
 [ -z $2 ] && read -p "To valoper (default $def_valoper) ? " valoper || valoper=$2
 [ -z $valoper ] && valoper=$def_valoper
 
-if [ -z $3 ] && read -p "Amount ? " amount || amount=$3
+[ -z $3 ] && read -p "Amount ? " amount || amount=$3
 
 echo $PASS | $BINARY tx staking delegate $valoper $amount$DENOM --from $key \
  --gas-prices $GAS_PRICE --gas-adjustment $GAS_ADJ --gas auto -y
