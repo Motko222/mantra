@@ -33,7 +33,7 @@ threshold=$($BINARY query tendermint-validator-set -o json | jq -r .validators[]
 if $catchingUp
  then 
   status="syncing"
-  note="height=$latestBlock"
+  message="height=$latestBlock"
  else 
   if [ $active -eq 1 ]; then status=active; else status=inactive; fi
 fi
@@ -41,12 +41,12 @@ fi
 if $jailed
  then
   status="error"
-  note="jailed"
+  message="jailed"
 fi 
 
 if [ -z $pid ];
 then status="error";
- note="process not running";
+ message="process not running";
 fi
 
 #json output
