@@ -6,6 +6,7 @@ source ~/.bash_profile
 
 neetwork=testnet
 group=validator
+id=$ID
 
 rpc_port=$(mantrachaind config | jq -r .node | cut -d : -f 3)
 json=$(curl -s localhost:$rpc_port/status | jq .result.sync_info)
@@ -55,7 +56,7 @@ fi
 cat << EOF
 {
   "updated":"$(date --utc +%FT%TZ)",
-  "id":"$ID",
+  "id":"$id",
   "machine":"$MACHINE",
   "version":"$version",
   "chain":"$chain",
