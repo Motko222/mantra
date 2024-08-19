@@ -8,8 +8,9 @@ neetwork=testnet
 group=validator
 id=$ID
 
-rpc_port=$(mantrachaind config | jq -r .node | cut -d : -f 3)
-json=$(curl -s localhost:$rpc_port/status | jq .result.sync_info)
+node=$(mantrachaind config get client node | cut -d / -f 3 | sed 's/"//g')
+
+json=$(curl -s $node/status | jq .result.sync_info)
 pid=$(pgrep $BINARY)
 version=$($BINARY version)
 network=$($BINARY status | jq -r .NodeInfo.network)
@@ -22,7 +23,7 @@ votingPower=$($BINARY status 2>&1 | jq -r .ValidatorInfo.VotingPower)
 chain=$(echo $json | jq -r '."chain-id"')
 wallet=$(echo $PASS | $BINARY keys show $KEY -a)
 valoper=$(echo $PASS | $BINARY keys show $KEY -a --bech val)
-moniker=$($BINARY query staking validator $valoper -o json | jq -r .description.moniker)
+moniker=$($BINARY query staking validator $valoper -o json | jq -r .validator.description.moniker)
 pubkey=$($BINARY tendermint show-validator --log_format json | jq -r .key)
 delegators=$($BINARY query staking delegations-to $valoper -o json | jq '.delegation_responses | length')
 jailed=$($BINARY query staking validator $valoper -o json | jq -r .jailed)
