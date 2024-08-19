@@ -1,4 +1,4 @@
-#!/bin/bash
+k#!/bin/bash
 
 folder=$(echo $(cd -- $(dirname -- "${BASH_SOURCE[0]}") && pwd) | awk -F/ '{print $NF}')
 source ~/scripts/$folder/cfg
@@ -6,7 +6,7 @@ source ~/.bash_profile
 
 neetwork=testnet
 group=validator
-chain=testnet
+network=testnet
 id=$ID
 
 node=$(mantrachaind config get client node | cut -d / -f 3 | sed 's/"//g')
@@ -14,7 +14,7 @@ node=$(mantrachaind config get client node | cut -d / -f 3 | sed 's/"//g')
 json=$(curl -s $node/status | jq .result.sync_info)
 pid=$(pgrep $BINARY)
 version=$($BINARY version)
-network=$($BINARY status | jq -r .node_info.network)
+chain=$($BINARY status | jq -r .node_info.network)
 type="validator"
 foldersize1=$(du -hs ~/.pryzm | awk '{print $1}')
 #foldersize2=$(du -hs ~/pryzm | awk '{print $1}')
