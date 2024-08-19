@@ -28,7 +28,7 @@ pubkey=$($BINARY tendermint show-validator --log_format json | jq -r .key)
 delegators=$($BINARY query staking delegations-to $valoper -o json | jq '.delegation_responses | length')
 jailed=$($BINARY query staking validator $valoper -o json | jq -r .jailed)
 if [ -z $jailed ]; then jailed=false; fi
-tokens=$($BINARY query staking validator $valoper -o json | jq -r .tokens | awk '{print $1/1000000}')
+tokens=$($BINARY query staking validator $valoper -o json | jq -r .validator.tokens | awk '{print $1/1000000}')
 balance=$($BINARY query bank balances $wallet -o json 2>/dev/null \
       | jq -r '.balances[] | select(.denom=="'$DENOM'")' | jq -r .amount)
 active=$($BINARY query tendermint-validator-set | grep -c $pubkey)
