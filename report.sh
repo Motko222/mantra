@@ -21,7 +21,6 @@ foldersize1=$(du -hs ~/.pryzm | awk '{print $1}')
 latestBlock=$(echo $json | jq -r .latest_block_height)
 catchingUp=$(echo $json | jq -r .catching_up)
 votingPower=$($BINARY status 2>&1 | jq -r .ValidatorInfo.VotingPower)
-chain=$(echo $json | jq -r '."chain-id"')
 wallet=$(echo $PASS | $BINARY keys show $KEY -a)
 valoper=$(echo $PASS | $BINARY keys show $KEY -a --bech val)
 moniker=$($BINARY query staking validator $valoper -o json | jq -r .validator.description.moniker)
@@ -61,8 +60,8 @@ cat << EOF
   "id":"$id",
   "machine":"$MACHINE",
   "version":"$version",
-  "chain":"$chain",
   "network":"$network",
+  "chain":"$chain",
   "status":"$status",
   "message":"$message",
   "node":"$node",
