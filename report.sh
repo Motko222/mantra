@@ -63,7 +63,7 @@ cat << EOF
   "chain":"$chain",
   "status":"$status",
   "message":"$message",
-  "rpcport":"$rpc_port",
+  "node":"$node",
   "folder1":"$foldersize1",
   "moniker":"$moniker",
   "key":"$KEY",
