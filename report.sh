@@ -72,8 +72,7 @@ cat >$json << EOF
     "catchingUp":"$catchingUp",
     "jailed":"$jailed",
     "active":$active,
-    "local_height":$latest_block,
-    "network_height":$network_height,
+    "local_height":$latestBlock,
     "votingPower":$votingPower,
     "tokens":$tokens,
     "threshold":$threshold,
@@ -83,4 +82,4 @@ cat >$json << EOF
 }
 EOF
 
-cat $json
+cat $json | jq
