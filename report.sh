@@ -3,24 +3,17 @@
 folder=$(echo $(cd -- $(dirname -- "${BASH_SOURCE[0]}") && pwd) | awk -F/ '{print $NF}')
 source ~/scripts/$folder/cfg
 source ~/.bash_profile
-
-neetwork=testnet
-group=validator
-network=testnet
-id=$ID
-owner=$OWNER
+json=~/logs/report-$folder
 
 node=$(mantrachaind config get client node | cut -d / -f 3 | sed 's/"//g')
 
-json=$(curl -s $node/status | jq .result.sync_info)
+status_json=$(curl -s $node/status | jq .result.sync_info)
 pid=$(pgrep $BINARY)
 version=$($BINARY version)
 chain=$($BINARY status | jq -r .node_info.network)
-type="validator"
-foldersize1=$(du -hs ~/.pryzm | awk '{print $1}')
-#foldersize2=$(du -hs ~/pryzm | awk '{print $1}')
-latestBlock=$(echo $json | jq -r .latest_block_height)
-catchingUp=$(echo $json | jq -r .catching_up)
+foldersize1=$(du -hs $DATA | awk '{print $1}')
+latestBlock=$(echo $status_json | jq -r .latest_block_height)
+catchingUp=$(echo $status_json | jq -r .catching_up)
 votingPower=$($BINARY status 2>&1 | jq -r .ValidatorInfo.VotingPower)
 wallet=$(echo $PASS | $BINARY keys show $KEY -a)
 valoper=$(echo $PASS | $BINARY keys show $KEY -a --bech val)
@@ -54,45 +47,38 @@ then status="error";
  message="process not running";
 fi
 
-#json output
-cat << EOF
-{
+cat >$json << EOF
+{ 
   "updated":"$(date --utc +%FT%TZ)",
-  "id":"$id",
-  "machine":"$MACHINE",
-  "version":"$version",
-  "network":"$network",
-  "chain":"$chain",
-  "status":"$status",
-  "message":"$message",
-  "node":"$node",
-  "folder1":"$foldersize1",
-  "moniker":"$moniker",
-  "key":"$KEY",
-  "wallet":"$wallet",
-  "valoper":"$valoper",
-  "pubkey":"$pubkey",
-  "catchingUp":"$catchingUp",
-  "jailed":"$jailed",
-  "active":$active,
-  "height":$latestBlock,
-  "votingPower":$votingPower,
-  "tokens":$tokens,
-  "threshold":$threshold,
-  "delegators":$delegators,
-  "balance":$balance
+  "measurement":"report",
+  "tags": {
+    "id":"$folder",
+    "machine":"$MACHINE",
+    "owner":"$OWNER",
+    "grp":"validator" },
+  "fields": {
+    "version":"$version",
+    "chain":"$chain",
+    "status":"$status",
+    "message":"$message",
+    "rpc":"$rpc",
+    "folder1":"$foldersize1",
+    "moniker":"$moniker",
+    "key":"$KEY",
+    "wallet":"$wallet",
+    "valoper":"$valoper",
+    "pubkey":"$pubkey",
+    "catchingUp":"$catchingUp",
+    "jailed":"$jailed",
+    "active":$active,
+    "local_height":$latest_block,
+    "network_height":$network_height,
+    "votingPower":$votingPower,
+    "tokens":$tokens,
+    "threshold":$threshold,
+    "delegators":$delegators,
+    "balance":$balance }
 }
 EOF
 
-# send data to influxdb
-if [ ! -z $INFLUX_HOST ]
-then
- curl --request POST \
- "$INFLUX_HOST/api/v2/write?org=$INFLUX_ORG&bucket=$INFLUX_BUCKET&precision=ns" \
-  --header "Authorization: Token $INFLUX_TOKEN" \
-  --header "Content-Type: text/plain; charset=utf-8" \
-  --header "Accept: application/json" \
-  --data-binary "
-    report,machine=$MACHINE,id=$id,moniker=$moniker,grp=$group,owner=$owner status=\"$status\",message=\"$message\",version=\"$version\",url=\"$url\",chain=\"$chain\",network=\"$network\",tokens=\"$tokens\",threshold=\"$threshold\",active=\"$active\",jailed=\"$jailed\" $(date +%s%N) 
-    "
-fi
+cat $json
