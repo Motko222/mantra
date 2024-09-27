@@ -55,7 +55,8 @@ cat >$json << EOF
     "id":"$folder",
     "machine":"$MACHINE",
     "owner":"$OWNER",
-    "grp":"validator" },
+    "grp":"validator" 
+  }
   "fields": {
     "version":"$version",
     "chain":"$chain",
@@ -77,7 +78,8 @@ cat >$json << EOF
     "tokens":$tokens,
     "threshold":$threshold,
     "delegators":$delegators,
-    "balance":$balance }
+    "balance":$balance 
+  }
 }
 EOF
 
