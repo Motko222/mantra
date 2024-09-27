@@ -56,7 +56,7 @@ cat >$json << EOF
     "machine":"$MACHINE",
     "owner":"$OWNER",
     "grp":"validator" 
-  }
+  },
   "fields": {
     "version":"$version",
     "chain":"$chain",
